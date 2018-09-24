@@ -1,0 +1,7 @@
+{
+  "name": "IonicPromise",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
