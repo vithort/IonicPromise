@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { CorrecaoMonetariaProvider } from '../../providers/correcao-monetaria/correcao-monetaria';
 
 @Component({
     selector: 'page-home',
@@ -8,7 +9,10 @@ import { NavController } from 'ionic-angular';
 export class HomePage {
     resultado: number = 0;
 
-    constructor(public navCtrl: NavController) {
+    constructor(
+        public navCtrl: NavController
+        , private correcaoMonetaria: CorrecaoMonetariaProvider
+        ) {
 
     }
 
@@ -55,8 +59,8 @@ export class HomePage {
         let valor: number = 100;
         let valorCorrigido: number = 0;
 
-        let jurosPromise = this.calcularJuros(valor);
-        let multaPromise = this.calcularMulta(valor);
+        let jurosPromise = this.correcaoMonetaria.calcularJuros(valor);
+        let multaPromise = this.correcaoMonetaria.calcularMulta(valor);
 
         Promise.all([jurosPromise, multaPromise])
         .then((result: number[]) => {
@@ -64,34 +68,4 @@ export class HomePage {
           this.resultado = valorCorrigido;
         })
     }
-
-    calcularJuros(valorBase: number): Promise<number> {
-        return new Promise((resolve, reject) => {
-            if (valorBase > 0) {
-                let result: number = 0;
-                let juros: number = 0.1;
-
-                result = valorBase + (valorBase * juros);
-                resolve(result);
-            } else {
-                reject('O valor não pode ser zero.');
-            }
-        });
-    }
-
-    calcularMulta(valorBase: number): Promise<number> {
-        return new Promise((resolve, reject) => {
-            if (valorBase > 0) {
-                let result: number = 0;
-                let multa: number = 50;
-
-                result = valorBase + multa;
-                resolve(result);
-            } else {
-                reject('O valor não pode ser zero.');
-            }
-        });
-
-    }
-
 }
